@@ -3,7 +3,7 @@
 	//to use session
 	session_start();
 
-	//for mysql database connection
+	//for mysqli database connection
 	include('dbconfig/dbconfig.php');
 	$currentpage = 'register';
 
@@ -97,39 +97,6 @@
 									<input type="date" class="form-control" placeholder="mm/dd/yyyy" required  name="customerdob">
 									</div>
 								</div>
-
-
-								<!--Paypal-->
-
-								<!-- <div class="form-group">
-									<div class="col-md-4 col-sm-4 col-xs-12">
-									</div>
-									<div class="col-md-7 col-sm-7 col-xs-12">
-										<input type="checkbox" id="paypal" name="paypal" onclick="check(this);" class="" value="paypal">
-										<label for="paypal"><i class="fa fa-paypal"></i> I have Paypal Account!</label>
-									</div>
-									
-								</div> 
-
-
-								<div id="financedetail" style="display: none;">
-								<hr>
-									<h3 style="text-align: center;"><i class="fa fa-money"></i> Finance Detail</h3><br>
-									
-									<div class="form-group">
-										<label class="control-label col-md-4 col-sm-4 col-xs-12" for="paypalemail"><i class="fa fa-envelope"></i> Paypal Email</label>
-										<div class="col-md-7 col-sm-7 col-xs-12">
-											<input type="hidden" id="paypalemail" required="" class="form-control" name="paypalemail">
-										</div>
-									</div>
-									
-									<div class="form-group">
-										<label class="control-label col-md-4 col-sm-4 col-xs-12" for="paypalpassword"><i class="fa fa-unlock"></i> Paypal Password</label>
-										<div class="col-md-7 col-sm-7 col-xs-12">
-											<input type="hidden" required="" id="paypalpassword" class="form-control" name="paypalpassword">
-										</div>
-									</div>
-								</div -->
 								<div class="form-group">
 									<input type="submit" value="Register" name="submit" class="btn btn-primary center-block">
 								</div>
@@ -146,29 +113,6 @@
 	<script src="javascripts/bootstrap.min.js"></script>
 	<!-- SweetAlert -->
 	<script src="javascripts/sweetalert-dev.js"></script>
-	
-	<!--PAYPAL function-->
-	<!-- <script>
-		function check(cb)
-		{
-		    if($(cb).is(":checked"))
-		    {
-		        document.getElementById('financedetail').style.display = "block";
-		        document.getElementById('paypalemail').required = "required";
-		        document.getElementById('paypalemail').type = "email";
-		        document.getElementById('paypalpassword').type = "password";
-		        document.getElementById('paypalpassword').required = "required";
-		    }
-		    else
-		    {
-		        document.getElementById('financedetail').style.display = "none";
-		        document.getElementById('paypalemail').type = "hidden";
-		        document.getElementById('paypalpassword').type = "hidden";
-		        document.getElementById('paypalemail').required = "";
-		        document.getElementById('paypalpassword').required = "";
-		    }
-		}
-	</script> -->
 
 			
 	</body>
@@ -196,8 +140,8 @@
 
                 else{
 
-	                $checkemailsql = mysql_query("SELECT * FROM customers where customeremail = '$customeremail'");
-	                $checkemailnumrow = mysql_num_rows($checkemailsql);
+	                $checkemailsql = mysqli_query($conn,"SELECT * FROM customers where customeremail = '$customeremail'");
+	                $checkemailnumrow = mysqli_num_rows($checkemailsql);
 	                if ($checkemailnumrow > 0) {
 	                    echo "<script>swal({
 	                    title: 'Oops!',
@@ -212,8 +156,8 @@
 
 	                else{
 
-		                $checkusername = mysql_query("SELECT * FROM customers where customerusername = '$customerusername'");
-		                $rownousername = mysql_num_rows($checkusername);
+		                $checkusername = mysqli_query($conn,"SELECT * FROM customers where customerusername = '$customerusername'");
+		                $rownousername = mysqli_num_rows($checkusername);
 		                if($rownousername > 0) {
 		                    echo "<script>swal({
 		                    title: 'Oops!',
@@ -229,15 +173,15 @@
 		                else{
 		                	$customerpassword = md5($customerpassword);
 
-						  	$getlatestid = mysql_query("SELECT customerid FROM customers WHERE SUBSTRING(customerid,4) = (SELECT MAX(CAST(SUBSTRING(customerid,4) AS SIGNED)) FROM customers)"); 
-							$queryrow = mysql_num_rows($getlatestid);
+						  	$getlatestid = mysqli_query($conn,"SELECT customerid FROM customers WHERE SUBSTRING(customerid,4) = (SELECT MAX(CAST(SUBSTRING(customerid,4) AS SIGNED)) FROM customers)"); 
+							$queryrow = mysqli_num_rows($getlatestid);
 							
 							if ($queryrow < 1){
 								$customerid = 'cus1';
 							}
 
 							else{
-								  while ($row = mysql_fetch_assoc($getlatestid)):
+								  while ($row = mysqli_fetch_assoc($getlatestid)):
 								    $lastid =  $row['customerid'];
 									$lastid = preg_replace("/[^0-9]/","",$lastid);
 								  endwhile;
@@ -245,13 +189,7 @@
 								  $customerid = 'cus'.$lastid;
 							}
 
-			                $registersql = mysql_query("insert into customers(customerid, customername, customerusername, customeremail, customerpassword, customergender, customerdob, customerphoto, signuptime) values('$customerid','$customername', '$customerusername', '$customeremail', '$customerpassword', '$customergender', '$customerdob', 'customer.png', NOW())") or die(mysql_error());
-							// if (isset($_POST['paypal'])) {
-							// 	$paypalemail = $_POST['paypalemail'];
-							// 	$paypalpassword = $_POST['paypalpassword'];
-							// 	$paypalpassword = md5($paypalpassword);
-							// 	$registerpaypalsql = mysql_query("insert into paypalserver(paypalemail, paypalpassword, customerid, balance) values('$paypalemail', '$paypalpassword', '$customerid', 10000)") or die(mysql_error());
-							// 	}
+			                $registersql = mysqli_query($conn,"insert into customers(customerid, customername, customerusername, customeremail, customerpassword, customergender, customerdob, customerphoto, signuptime) values('$customerid','$customername', '$customerusername', '$customeremail', '$customerpassword', '$customergender', '$customerdob', 'customer.png', NOW())") or die(mysqli_error($conn));
 
 						    $_SESSION['authentication'] = true;
 						    $_SESSION['customerusername'] = $customerusername;

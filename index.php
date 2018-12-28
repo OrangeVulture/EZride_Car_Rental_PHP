@@ -5,6 +5,7 @@
 
 	//for mysql database connection
 	include('dbconfig/dbconfig.php');
+	  //$conn = mysqli_connect("localhost","root","","ezride");
 	$currentpage = 'index';
 
 
@@ -50,8 +51,8 @@
 						<label for="hirefrom"><i class="fa fa-home"></i> Hire from :</label></div>
 						<select name="officeid" id="hirefrom" class="form-control" required="required">
 							<?php
-								$sqlgetoffice = mysql_query("SELECT * from Offices");
-								while ($rowgetoffice = mysql_fetch_assoc($sqlgetoffice)):
+								$sqlgetoffice = mysqli_query($conn,"SELECT * from Offices");
+								while ($rowgetoffice = mysqli_fetch_assoc($sqlgetoffice)):
 							?>
 								<option value="<?php echo $rowgetoffice['officeid']; ?>"><?php echo $rowgetoffice['officename']; ?> Office</option>
 							<?php	
@@ -88,7 +89,7 @@
 
 
 			<?php else: ?>
-				<form action="" method="post">
+				<form action="index.php" method="post">
 					<div class="form-group">
 						<label for="customerusername"><i class='fa fa-user-circle-o'></i> Username</label>
 
@@ -172,14 +173,14 @@
 			$customerrawpassword = $_POST['customerpassword'];
 			$customerpassword = md5($customerrawpassword);
 
-			$query = mysql_query("SELECT * FROM Customers where customerusername = '$customerusername' AND customerpassword = '$customerpassword' and active = 1") or die(mysql_error());
-			$querynumrow = mysql_num_rows($query);
+			$query = mysqli_query($conn,"SELECT * FROM Customers where customerusername = '$customerusername' AND customerpassword = '$customerpassword' and active = 1") or die(mysqli_error($conn));
+			$querynumrow = mysqli_num_rows($query);
 
 			if($querynumrow > 0)
 			{
 			    $_SESSION['authentication'] = true;
 			    $_SESSION['customerusername'] = $customerusername;
-			    $row = mysql_fetch_assoc($query);
+			    $row = mysqli_fetch_assoc($query);
 			    $customerid = $row['customerid'];
 			    $_SESSION['customerid'] = $customerid;
 		  		echo "<script>swal({
@@ -193,8 +194,8 @@
 				});</script>";
 			}
 			else{
-				$checkban = mysql_query("SELECT * FROM Customers where customerusername = '$customerusername' AND customerpassword = '$customerpassword' and active = 0") or die(mysql_error());
-				$checkbanquerynumrow = mysql_num_rows($checkban);
+				$checkban = mysqli_query($conn,"SELECT * FROM Customers where customerusername = '$customerusername' AND customerpassword = '$customerpassword' and active = 0") or die(mysqli_error($conn));
+				$checkbanquerynumrow = mysqli_num_rows($checkban);
 				if ($checkbanquerynumrow > 0) {
 					echo "<script>swal({
 					title: 'Oops!',

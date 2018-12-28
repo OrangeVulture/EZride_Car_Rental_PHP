@@ -108,28 +108,6 @@ insert  into `carratings`(`carno`,`customerid`,`carrating`,`carreview`,`ratingti
   ('car8','cus4',3,'I think it is a bit expensive! ','2018-10-01 23:05:55'),
   ('car8','cus5',4,'Great Car! I just love it!','2018-10-01 23:05:55');
 
-/*Table structure for table `driverratings` */
-
-DROP TABLE IF EXISTS `driverratings`;
-
-CREATE TABLE `driverratings` (
-  `driverid` varchar(15) NOT NULL,
-  `customerid` varchar(15) NOT NULL,
-  `driverrating` int(11) NOT NULL,
-  `driverreview` varchar(50) NOT NULL,
-  `ratingtime` datetime NOT NULL,
-  PRIMARY KEY (`driverid`,`customerid`),
-  KEY `customerid` (`customerid`),
-  CONSTRAINT `driverratings_ibfk_1` FOREIGN KEY (`driverid`) REFERENCES `drivers` (`driverid`),
-  CONSTRAINT `driverratings_ibfk_2` FOREIGN KEY (`customerid`) REFERENCES `customers` (`customerid`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-/*Data for the table `driverratings` */
-
-insert  into `driverratings`(`driverid`,`customerid`,`driverrating`,`driverreview`,`ratingtime`) values 
-  ('driver34','cus1',3,'fsadf','2017-04-24 02:46:06'),
-  ('driver34','cus2',5,'Great!','2018-03-24 02:46:06'),
-  ('driver34','cus3',5,'Friendly!','2018-04-24 02:46:06');
 
 /*Table structure for table `offices` */
 
@@ -217,9 +195,34 @@ insert  into `drivers`(`driverid`,`drivername`,`driverusername`,`driverpassword`
   ('driver40','Camera','Liberty','c974f63abee678d0e103167ad9c813a5',20,0,'office3',1200,'female','driver1.png','Cras.vulputate.velit@iaculis.e','license.png','6','2017-02-08 09:00:00',NULL,1),
   ('driver41','Gilth','Jennifer','c974f63abee678d0e103167ad9c813a5',46,0,'office3',1200,'female','driver1.png','facilisis.lorem.tristique@volu','license.png','9','2017-02-08 09:00:00',NULL,1),
   ('driver42','Candice','Malco','c974f63abee678d0e103167ad9c813a5',36,0,'office4',1200,'female','driver1.png','sapien@tinciduntpede.net','license.png','10','2017-02-08 09:00:00',NULL,1),
-  ('driver43','Sita','Gray','c974f63abee678d0e103167ad9c813a5',32,0,'office5',1200,'male','driver1.png','ante@rhoncusNullam.edu','license.png','7','2017-02-08 09:00:00',NULL,1);
+  ('driver43','Sita','Gray','c974f63abee678d0e103167ad9c813a5',32,0,'office5',1200,'male','driver1.png','ante@rhoncusNullam.edu','license.png','7','2017-02-08 09:00:00',NULL,1),
+  ('nodriver','nodriver','nodriver','nodriver',0,1,'office1',0,'nodriver','nodriver','nodriver','nodriver','nodriver','0000-00-00 00:00:00',NULL,1);
 
-  /*('driver44','Wayne Caldwell','BellRocha','c974f63abee678d0e103167ad9c813a5',25,0,'employee','office5',20,'female','driver1.png','risus.Duis.a@pharetraNam.edu','license.png','4','2017-02-08 09:00:00',NULL,1),('driver45','Elaine Parrish','NoelleBuckner','c974f63abee678d0e103167ad9c813a5',23,0,'employee','office1',32,'male','driver1.png','cursus.luctus.ipsum@consequatn','license.png','6','2017-02-08 09:00:00',NULL,1),('driver46','Malachi Knapp','RyderSalas','c974f63abee678d0e103167ad9c813a5',23,0,'employee','office1',38,'female','driver1.png','gravida.mauris@Donec.edu','license.png','8','2017-02-08 09:00:00',NULL,1),('driver47','Hayes Harding','BrynnLloyd','c974f63abee678d0e103167ad9c813a5',46,0,'freelance','office4',26,'male','driver1.png','Morbi.non.sapien@sitamet.net','license.png','10','2017-02-08 09:00:00',NULL,1),('driver48','Jelani Wise','PandoraCameron','c974f63abee678d0e103167ad9c813a5',34,0,'employee','office5',31,'female','driver1.png','gravida@varius.edu','license.png','6','2017-02-08 09:00:00',NULL,1),('driver49','Angela Sloan','KeefeSalazar','c974f63abee678d0e103167ad9c813a5',35,0,'freelance','office1',24,'male','driver1.png','odio.Aliquam.vulputate@atarcu.','license.png','7','2017-02-08 09:00:00',NULL,1),('driver5','Maia Bowman','FultonCampos','c974f63abee678d0e103167ad9c813a5',25,0,'employee','office1',32,'female','driver1.png','amet.ultricies@ipsum.com','license.png','7','2017-02-08 09:00:00',NULL,1),('driver50','Buffy Stevens','DarrelArmstrong','c974f63abee678d0e103167ad9c813a5',27,0,'employee','office2',39,'male','driver1.png','felis.adipiscing@euismod.edu','license.png','3','2017-02-08 09:00:00',NULL,1),('driver6','Deirdre English','FaithBrock','c974f63abee678d0e103167ad9c813a5',39,0,'employee','office2',40,'female','driver1.png','odio.Nam.interdum@nonummyFusce','license.png','3','2017-02-08 09:00:00',NULL,1),('driver7','Frances Conley','CarlRice','c974f63abee678d0e103167ad9c813a5',24,0,'employee','office4',34,'female','driver1.png','dui.Cras.pellentesque@Proin.or','license.png','10','2017-02-08 09:00:00',NULL,1),('driver8','Kirby Skinner','ChantaleMeyers','c974f63abee678d0e103167ad9c813a5',46,0,'employee','office5',35,'male','driver1.png','interdum.Sed@cursusInteger.co.','license.png','7','2017-02-08 09:00:00',NULL,1),('driver9','Sara Powers','NoelBlackwell','c974f63abee678d0e103167ad9c813a5',50,0,'employee','office4',38,'female','driver1.png','sapien.cursus.in@malesuadaut.e','license.png','9','2017-02-08 09:00:00',NULL,1),('nodriver','nodriver','nodriver','nodriver',0,1,'nodriver','office1',0,'nodriver','nodriver','nodriver','nodriver','nodriver','2017-02-08 10:00:00',NULL,1);*/
+
+/*Table structure for table `driverratings` */
+
+DROP TABLE IF EXISTS `driverratings`;
+
+CREATE TABLE `driverratings` (
+  `driverid` varchar(15) NOT NULL,
+  `customerid` varchar(15) NOT NULL,
+  `driverrating` int(11) NOT NULL,
+  `driverreview` varchar(50) NOT NULL,
+  `ratingtime` datetime NOT NULL,
+  PRIMARY KEY (`driverid`,`customerid`),
+  KEY `customerid` (`customerid`),
+  CONSTRAINT `driverratings_ibfk_1` FOREIGN KEY (`driverid`) REFERENCES `drivers` (`driverid`),
+  CONSTRAINT `driverratings_ibfk_2` FOREIGN KEY (`customerid`) REFERENCES `customers` (`customerid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Data for the table `driverratings` */
+
+insert  into `driverratings`(`driverid`,`customerid`,`driverrating`,`driverreview`,`ratingtime`) values 
+  ('driver34','cus1',3,'fsadf','2017-04-24 02:46:06'),
+  ('driver34','cus2',5,'Great!','2018-03-24 02:46:06'),
+  ('driver34','cus3',5,'Friendly!','2018-04-24 02:46:06');
+
+
 
 /*Table structure for table `mails` */
 
@@ -271,11 +274,11 @@ insert  into `officecars`(`officeid`,`carno`,`carid`) values
   ('office1','car7','carid8'),
   ('office1','car8','carid9'),
   ('office1','car8','carid10'),
-  ('office1','car9','carid11'),
+  ('office1','car2','carid11'),
   ('office1','car1','carid12'),
   ('office2','car8','carid13'),
-  ('office2','car9','carid14'),
-  ('office2','car9','carid15'),
+  ('office2','car7','carid14'),
+  ('office2','car11','carid15'),
   ('office2','car10','carid16'),
   ('office2','car10','carid17'),
   ('office2','car2','carid18'),
@@ -293,12 +296,12 @@ insert  into `officecars`(`officeid`,`carno`,`carid`) values
   ('office3','car7','carid30'),
   ('office3','car8','carid31'),
   ('office3','car8','carid32'),
-  ('office4','car9','carid33'),
+  ('office4','car7','carid33'),
   ('office4','car1','carid34'),
-  ('office4','car9','carid35'),
+  ('office4','car11','carid35'),
   ('office4','car8','carid36'),
-  ('office4','car9','carid37'),
-  ('office4','car9','carid38'),
+  ('office4','car5','carid37'),
+  ('office4','car3','carid38'),
   ('office4','car10','carid39'),
   ('office4','car10','carid40'),
   ('office4','car2','carid41'),
@@ -345,25 +348,6 @@ insert  into `officephones`(`officephoneid`,`officeid`,`officephoneprefix`,`offi
   (13,'office5','022',27738999),
   (14,'office5','022',27738996),
   (15,'office5','+91',9869629164);
-
-/*Table structure for table `paypalserver` */
-
--- DROP TABLE IF EXISTS `paypalserver`;
-
--- CREATE TABLE `paypalserver` (
---   `paypalid` int(11) NOT NULL AUTO_INCREMENT,
---   `paypalemail` varchar(30) NOT NULL,
---   `paypalpassword` varchar(50) NOT NULL,
---   `customerid` varchar(30) NOT NULL,
---   `balance` int(11) NOT NULL DEFAULT '5000',
---   PRIMARY KEY (`paypalid`),
---   KEY `customerid` (`customerid`),
---   CONSTRAINT `paypalserver_ibfk_1` FOREIGN KEY (`customerid`) REFERENCES `customers` (`customerid`)
--- ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
-
--- /*Data for the table `paypalserver` */
-
--- insert  into `paypalserver`(`paypalid`,`paypalemail`,`paypalpassword`,`customerid`,`balance`) values (8,'zinminht3t@gmail.com','f4ad231214cb99a985dff0f056a36242','cus1',4200),(9,'johndoe@gmail.com','f4ad231214cb99a985dff0f056a36242','cus6',10000),(10,'khunsithar7rs@gmail.com','f4ad231214cb99a985dff0f056a36242','cus8',10000),(11,'akm97@gmail.com','f4ad231214cb99a985dff0f056a36242','cus8',10000);
 
 /*Table structure for table `staffs` */
 

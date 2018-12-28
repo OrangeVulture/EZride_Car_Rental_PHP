@@ -72,10 +72,10 @@
 				$rawstaffpassword = $_POST['staffpassword'];
 				$staffpassword = md5($rawstaffpassword);
 
-				$sql = mysql_query("SELECT * from Staffs where staffusername = '$staffusername' AND staffpassword = '$staffpassword' and active = 1");
-				$rownum = mysql_num_rows($sql);
+				$sql = mysqli_query($conn,"SELECT * from Staffs where staffusername = '$staffusername' AND staffpassword = '$staffpassword' and active = 1");
+				$rownum = mysqli_num_rows($sql);
 				if ($rownum > 0) {
-					$rowstaff = mysql_fetch_assoc($sql);
+					$rowstaff = mysqli_fetch_assoc($sql);
 					$_SESSION['staffid'] = $rowstaff['staffid'];
 					$_SESSION['staffusername'] = $rowstaff['staffusername'];
 					$_SESSION['staffrole'] = $rowstaff['staffrole'];
@@ -106,8 +106,8 @@
 					}
 				}
 				else{
-					$checkban = mysql_query("SELECT * FROM Staffs where staffusername = '$staffusername' AND staffpassword = '$staffpassword' and active = 0") or die(mysql_error());
-					$checkbanquerynumrow = mysql_num_rows($checkban);
+					$checkban = mysqli_query($conn,"SELECT * FROM Staffs where staffusername = '$staffusername' AND staffpassword = '$staffpassword' and active = 0") or die(mysqli_error($conn));
+					$checkbanquerynumrow = mysqli_num_rows($checkban);
 					if ($checkbanquerynumrow > 0) {
 						echo "<script>swal({
 						title: 'Oops!',

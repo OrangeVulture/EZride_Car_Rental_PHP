@@ -16,10 +16,11 @@
 
 			<ul class="nav navbar-nav navbar-right" id="naviga">
 			<?php 
+			include('dbconfig/DBConfig.php');
 			if (isset($_SESSION['authentication'])):
 				$customerusername = $_SESSION['customerusername'];
-				$getcustomer = mysql_query("select * from Customers where customerusername = '$customerusername'") or die(mysql_error());
-				$rowgetcustomer = mysql_fetch_assoc($getcustomer);
+				$getcustomer = mysqli_query($conn,"select * from Customers where customerusername = '$customerusername'") or die(mysqli_error($conn));
+				$rowgetcustomer = mysqli_fetch_assoc($getcustomer);
 				$customerphoto = $rowgetcustomer['customerphoto'];
 				$customerid = $rowgetcustomer['customerid'];
 			?>

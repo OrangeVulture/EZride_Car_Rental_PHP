@@ -3,7 +3,7 @@
 	//to use session
 	session_start();
 
-	//for mysql database connection
+	//for mysqli database connection
 	include('dbconfig/dbconfig.php');
 	
 	if (!isset($_SESSION['authentication'])) {
@@ -14,9 +14,9 @@
 	$customerid = $_SESSION['customerid'];
 	$customerusername = $_SESSION['customerusername'];
 
-	$getcustomer = mysql_query("select * from customers where customerid = '$customerid'") or die(mysql_error());
+	$getcustomer = mysqli_query($conn,"select * from customers where customerid = '$customerid'") or die(mysqli_error($conn));
 
-	$rowgetcustomerdata = mysql_fetch_assoc($getcustomer);
+	$rowgetcustomerdata = mysqli_fetch_assoc($getcustomer);
 	$customeremail = $rowgetcustomerdata['customeremail'];
 	$currentpage = 'index';
 
@@ -129,8 +129,8 @@
 	            $oldpassword = md5($oldpassword);
 	            $newpassword = md5($newpassword);
 
-	            $checkpasswordsql = mysql_query("SELECT * FROM customers where customerusername = '$customerusername' AND customerpassword = '$oldpassword'") or die(mysql_error());
-	            $rowcheckpassword = mysql_num_rows($checkpasswordsql);
+	            $checkpasswordsql = mysqli_query($conn,"SELECT * FROM customers where customerusername = '$customerusername' AND customerpassword = '$oldpassword'") or die(mysqli_error($conn));
+	            $rowcheckpassword = mysqli_num_rows($checkpasswordsql);
 
 	            if ($rowcheckpassword < 1) {
 		            echo "<script>swal({
@@ -144,7 +144,7 @@
 		            });</script>";
 	            }
 	            else{
-	                $changepasswordsql = mysql_query("UPDATE customers set customerpassword = '$newpassword' where customerusername = '$customerusername'") or die(mysql_error());
+	                $changepasswordsql = mysqli_query($conn,"UPDATE customers set customerpassword = '$newpassword' where customerusername = '$customerusername'") or die(mysqli_error($conn));
 
 					require 'sendemail/phpmailer/PHPMailerAutoload.php';
 				    $email = 'xerocarrental@gmail.com';                    

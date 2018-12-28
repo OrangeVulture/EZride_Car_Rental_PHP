@@ -3,7 +3,7 @@
 	//to use session
 	session_start();
 
-	//for mysql database connection
+	//for mysqli database connection
 	include('dbconfig/dbconfig.php');
 	
 	if (!isset($_SESSION['authentication'])) {
@@ -117,7 +117,7 @@
                     $next = $start + $limit; 
                     $prev = $start - $limit;
 
-                    $total = mysql_query("SELECT c.*, oc.carid FROM Cars c, OfficeCars oc
+                    $total = mysqli_query($conn,"SELECT c.*, oc.carid FROM Cars c, OfficeCars oc
 												WHERE oc.officeid = '$officeid' 
 												AND	c.carno = oc.carno
 												AND oc.carid NOT IN
@@ -126,9 +126,9 @@
 													AND b.pickuptime BETWEEN '$pickuptime' AND '$returntime'
 												OR b.returntime BETWEEN '$pickuptime' AND '$returntime')
 												GROUP BY c.carname");
-                    $total = mysql_num_rows($total);
+                    $total = mysqli_num_rows($total);
 
-					$getcarsquery = mysql_query("SELECT c.*, oc.carid FROM Cars c, OfficeCars oc
+					$getcarsquery = mysqli_query($conn,"SELECT c.*, oc.carid FROM Cars c, OfficeCars oc
 												WHERE oc.officeid = '$officeid' 
 												AND	c.carno = oc.carno
 												AND oc.carid NOT IN
@@ -142,7 +142,7 @@
 						echo "<div class='row car'> <p>Sorry, there is no car available for your booking date!</div>";
 					}
 					else{
-					while ($rowgetcars = mysql_fetch_assoc($getcarsquery)):
+					while ($rowgetcars = mysqli_fetch_assoc($getcarsquery)):
 						$carno = $rowgetcars['carno'];
 					?>
 
@@ -179,8 +179,8 @@
 
 						<div class="col-md-4">
 							<?php
-								$countrating = mysql_query("SELECT * FROM carratings cr, customers c WHERE cr.CustomerID = c.CustomerID AND carno = '$carno'") or die(mysql_error());
-								$rowcountrating = mysql_num_rows($countrating);
+								$countrating = mysqli_query($conn,"SELECT * FROM carratings cr, customers c WHERE cr.CustomerID = c.CustomerID AND carno = '$carno'") or die(mysqli_error($conn));
+								$rowcountrating = mysqli_num_rows($countrating);
 
 							?>
 							<h4>Ratings</h4>
@@ -201,8 +201,8 @@
 							<hr>
 							<h4><i class="fa fa-comments-o"></i> Comments</h4>
 							<?php
-								$getcommentssql = mysql_query("SELECT * FROM carratings cr, customers c WHERE cr.CustomerID = c.CustomerID AND carno = '$carno' order by cr.ratingtime DESC limit 2 ") or die(mysql_error());
-								$rownogetcomments = mysql_num_rows($getcommentssql);
+								$getcommentssql = mysqli_query($conn,"SELECT * FROM carratings cr, customers c WHERE cr.CustomerID = c.CustomerID AND carno = '$carno' order by cr.ratingtime DESC limit 2 ") or die(mysqli_error($conn));
+								$rownogetcomments = mysqli_num_rows($getcommentssql);
 								if ($rownogetcomments < 1) {
 							?>
 							<p>There is no comment to show yet!</p>
@@ -211,7 +211,7 @@
 							?>
 							<ul class="list-unstyled comments">
 							<?php
-								while ($rowgetcomments = mysql_fetch_assoc($getcommentssql)):
+								while ($rowgetcomments = mysqli_fetch_assoc($getcommentssql)):
 							?>
 								<li>
 									<span style="color: black"><strong><i class="fa fa-user"></i> <?php echo $rowgetcomments['customerusername']; ?></strong></span> : <em><?php echo $rowgetcomments['carreview']; ?></em> 

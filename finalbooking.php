@@ -3,7 +3,7 @@
 	//to use session
 	session_start();
 
-	//for mysql database connection
+	//for mysqli database connection
 	include('dbconfig/dbconfig.php');
 
 	if (!isset($_SESSION['secondbooking'])) {
@@ -14,10 +14,10 @@
 	$durationinhours = $_SESSION['durationinhours'];
 	$driver = $_SESSION['driver'];
 
-	$getcarsql = mysql_query("SELECT c.*, oc.carid FROM Cars c, OfficeCars oc
+	$getcarsql = mysqli_query($conn,"SELECT c.*, oc.carid FROM Cars c, OfficeCars oc
 												WHERE c.carno = oc.carno
-												AND oc.carid = '$carid'") or die(mysql_error());
-	$rowgetcar = mysql_fetch_assoc($getcarsql);
+												AND oc.carid = '$carid'") or die(mysqli_error($conn));
+	$rowgetcar = mysqli_fetch_assoc($getcarsql);
 
 	$carcost = $rowgetcar['carcost']/6 * $durationinhours;
 	$_SESSION['carcost'] = $carcost;
@@ -28,8 +28,8 @@
 	}
 	else{
 		$driverid = $_SESSION['driverid'];
-		$getdriversql = mysql_query("SELECT * FROM Drivers where driverid = '$driverid'") or die(mysql_error());
-		$rowgetdriver = mysql_fetch_assoc($getdriversql);
+		$getdriversql = mysqli_query($conn,"SELECT * FROM Drivers where driverid = '$driverid'") or die(mysqli_error($conn));
+		$rowgetdriver = mysqli_fetch_assoc($getdriversql);
 		$drivercost = $rowgetdriver['drivercost']/24 * $durationinhours;
 		$_SESSION['drivercost'] = $drivercost;
 	}
@@ -37,8 +37,8 @@
 
 
 	$customerusername = $_SESSION['customerusername'];
-	$getcustomer = mysql_query("SELECT * FROM Customers where customerusername = '$customerusername'");
-	$rowgetcustomer = mysql_fetch_assoc($getcustomer);
+	$getcustomer = mysqli_query($conn,"SELECT * FROM Customers where customerusername = '$customerusername'");
+	$rowgetcustomer = mysqli_fetch_assoc($getcustomer);
 
 	$customerid = $rowgetcustomer['customerid'];
 	$currentpage = 'index';
@@ -278,15 +278,15 @@
 						if (isset($_POST['submit'])):
 
 						function Order($paymentmethod){
-						  	$getlatestid = mysql_query("SELECT bookingid FROM Bookings WHERE SUBSTRING(bookingid,8) = (SELECT MAX(CAST(SUBSTRING(bookingid,8) AS SIGNED)) FROM Bookings)"); 
-							$queryrow = mysql_num_rows($getlatestid);
+						  	$getlatestid = mysqli_query($conn,"SELECT bookingid FROM Bookings WHERE SUBSTRING(bookingid,8) = (SELECT MAX(CAST(SUBSTRING(bookingid,8) AS SIGNED)) FROM Bookings)"); 
+							$queryrow = mysqli_num_rows($getlatestid);
 
 							if ($queryrow < 1){
 								$bookingid = 'booking1';
 							}
 
 							else{
-								  while ($row = mysql_fetch_assoc($getlatestid)):
+								  while ($row = mysqli_fetch_assoc($getlatestid)):
 								    $lastid =  $row['bookingid'];
 									$lastid = preg_replace("/[^0-9]/","",$lastid);
 								  endwhile;
@@ -305,7 +305,7 @@
 							$returntime = $_SESSION['returntime'];
 							$pickuplocation = $_SESSION['pickuplocation'];
 							$returnlocation = $_SESSION['returnlocation'];
-							$reservesql = mysql_query("insert into Bookings(bookingid, customerid, officeid, pickuptime, returntime, pickuplocation, returnlocation, durationinhours, carid, carcost, driverid, drivercost, totalcost, paymentmethod, bookingtime) VALUES ('$bookingid', '$customerid', '$officeid', '$pickuptime', '$returntime', '$pickuplocation', '$returnlocation', '$durationinhours', '$carid', '$carcost', '$driverid', '$drivercost', '$totalcost', '$paymentmethod', now())") or die(mysql_error());
+							$reservesql = mysqli_query($conn,"insert into Bookings(bookingid, customerid, officeid, pickuptime, returntime, pickuplocation, returnlocation, durationinhours, carid, carcost, driverid, drivercost, totalcost, paymentmethod, bookingtime) VALUES ('$bookingid', '$customerid', '$officeid', '$pickuptime', '$returntime', '$pickuplocation', '$returnlocation', '$durationinhours', '$carid', '$carcost', '$driverid', '$drivercost', '$totalcost', '$paymentmethod', now())") or die(mysqli_error($conn));
 
 							$except =  array('customerusername','customerid' ,'authentication');
 							foreach ($_SESSION as $key => $value)
@@ -329,55 +329,8 @@
 						}
 
 						$paymentmethod = $_POST['payment'];
-
-						// if ($paymentmethod == 'paypal') {
-						// 	$paypalemail = $_POST['paypalemail'];
-						// 	$paypalpassword = $_POST['paypalpassword'];
-						// 	$paypalpassword = md5($paypalpassword);
-
-						// 	$verifypaypal = mysql_query("SELECT * FROM PayPalServer where customerid = '$customerid' AND paypalemail = '$paypalemail' and paypalpassword = '$paypalpassword'") or die(mysql_error());
-						// 	$rownoverifypaypal = mysql_num_rows($verifypaypal);
-						// 	if ($rownoverifypaypal > 0) {
-						// 		$rowverifypaypal = mysql_fetch_assoc($verifypaypal);
-						// 		$balance = $rowverifypaypal['balance'];
-						// 		if ($balance < $totalcost) {
-						// 	  		echo "<script>swal({
-						// 			  title: 'Oops!',
-						// 			  text: 'Your PayPal Balance is low! Cannot Purchase!',
-						// 			  type: 'error',
-						// 			  timer: 1500,
-						// 			  showConfirmButton: false
-						// 			}, function(){
-						// 			      window.location.href = 'finalbooking.php';
-						// 			});</script>";
-									
-						// 		}
-						// 		else{
-						// 			$changepaypalbalance = mysql_query("update PayPalServer set balance = balance - $totalcost where customerid = '$customerid'") or die(mysql_error());
-						// 			Order('paypal');
-						// 		}
-						// 	}
-						// 	else {
-						//   		echo "<script>swal({
-						// 		  title: 'Oops!',
-						// 		  text: 'Your PayPal Email or Password is wrong!',
-						// 		  type: 'error',
-						// 		  timer: 1500,
-						// 		  showConfirmButton: false
-						// 		}, function(){
-						// 		      window.location.href = 'finalbooking.php';
-						// 		});</script>";
-						// 	}
-
-						// }
-						// else{
 							Order('Pay at Arrival');
-						// }
-
-
-
 						endif;
-
 
 						?>
 </html>

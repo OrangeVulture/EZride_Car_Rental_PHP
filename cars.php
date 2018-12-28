@@ -1,7 +1,7 @@
 <?php
 	//to use session
 	session_start();
-	//for mysql database connection
+	//for mysqli database connection
 	include('dbconfig/dbconfig.php');
 	
 	if (!isset($_SESSION['authentication'])) {
@@ -66,11 +66,11 @@
                     $next = $start + $limit; 
                     $prev = $start - $limit;
 
-                    $total = mysql_query("SELECT * FROM cars");
-                    $total = mysql_num_rows($total);
+                    $total = mysqli_query($conn,"SELECT * FROM cars");
+                    $total = mysqli_num_rows($total);
 
-					$getcarsquery = mysql_query("SELECT * FROM cars ORDER BY carname DESC LIMIT $start, $limit");
-					while ($rowgetcars = mysql_fetch_assoc($getcarsquery)):
+					$getcarsquery = mysqli_query($conn,"SELECT * FROM cars ORDER BY carname DESC LIMIT $start, $limit");
+					while ($rowgetcars = mysqli_fetch_assoc($getcarsquery)):
 						$carno = $rowgetcars['carno'];
 					?>
 
@@ -110,8 +110,8 @@
 
 						<div class="col-md-3">
 							<?php
-								$countrating = mysql_query("SELECT * FROM carratings cr, customers c WHERE cr.CustomerID = c.CustomerID AND carno = '$carno'") or die(mysql_error());
-								$rowcountrating = mysql_num_rows($countrating);
+								$countrating = mysqli_query($conn,"SELECT * FROM carratings cr, customers c WHERE cr.CustomerID = c.CustomerID AND carno = '$carno'") or die(mysqli_error($conn));
+								$rowcountrating = mysqli_num_rows($countrating);
 
 							?>
 							<h4>Ratings</h4>
@@ -132,8 +132,8 @@
 							<hr>
 							<h4><i class="fa fa-comments"></i> Comments</h4>
 							<?php
-								$getcommentssql = mysql_query("SELECT * FROM carratings cr, customers c WHERE cr.CustomerID = c.CustomerID AND carno = '$carno' order by cr.ratingtime DESC limit 2 ") or die(mysql_error());
-								$rownogetcomments = mysql_num_rows($getcommentssql);
+								$getcommentssql = mysqli_query($conn,"SELECT * FROM carratings cr, customers c WHERE cr.CustomerID = c.CustomerID AND carno = '$carno' order by cr.ratingtime DESC limit 2 ") or die(mysqli_error($conn));
+								$rownogetcomments = mysqli_num_rows($getcommentssql);
 								if ($rownogetcomments < 1) {
 							?>
 							<p>There is no comment to show yet!</p>
@@ -142,7 +142,7 @@
 							?>
 							<ul class="list-unstyled comments">
 							<?php
-								while ($rowgetcomments = mysql_fetch_assoc($getcommentssql)):
+								while ($rowgetcomments = mysqli_fetch_assoc($getcommentssql)):
 							?>
 								<li>
 									<span style="color: black"><strong><i class="fa fa-user"></i> <?php echo $rowgetcomments['customerusername']; ?></strong></span> : 
@@ -161,10 +161,10 @@
 						<div class="col-md-3">
 							<?php
 							$carno = $rowgetcars['carno'];
-							$checkuserratingsql = mysql_query("select * from carratings where customerid = '$customerid' and carno = '$carno'") or die(mysql_error());
-							$rowcheckuserrating = mysql_num_rows($checkuserratingsql);
+							$checkuserratingsql = mysqli_query($conn,"select * from carratings where customerid = '$customerid' and carno = '$carno'") or die(mysqli_error($conn));
+							$rowcheckuserrating = mysqli_num_rows($checkuserratingsql);
 							if($rowcheckuserrating > 0):
-							$rowuserrating = mysql_fetch_assoc($checkuserratingsql);
+							$rowuserrating = mysqli_fetch_assoc($checkuserratingsql);
 							$userrating = $rowuserrating['carrating'];
 							$one = ''; $two = ''; $three = ''; $four = ''; $five = '';
 							for ($i=1; $i < 6; $i++) { 
@@ -295,9 +295,9 @@
 		$customerid = $_SESSION['customerid'];
 		$carno = $_POST['carno'];
 
-		$insertratingsql = mysql_query("INSERT INTO carratings(carno, customerid, carrating, carreview, ratingtime) VALUES('$carno', '$customerid', '$rating', '$comment', NOW())") or die(mysql_error());
+		$insertratingsql = mysqli_query($conn,"INSERT INTO carratings(carno, customerid, carrating, carreview, ratingtime) VALUES('$carno', '$customerid', '$rating', '$comment', NOW())") or die(mysqli_error($conn));
 
-		$updateratingavg = mysql_query("UPDATE cars SET carrating = (SELECT AVG(carrating) FROM carratings WHERE carratings.carno = '$carno') WHERE cars.carno = '$carno'") or die(mysql_error());
+		$updateratingavg = mysqli_query($conn,"UPDATE cars SET carrating = (SELECT AVG(carrating) FROM carratings WHERE carratings.carno = '$carno') WHERE cars.carno = '$carno'") or die(mysqli_error($conn));
   		echo "<script>swal({
 		  title: 'Success!',
 		  text: 'Your Comment has been saved!',

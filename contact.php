@@ -3,7 +3,7 @@
 	//to use session
 	session_start();
 
-	//for mysql database connection
+	//for mysqli database connection
 	include('dbconfig/dbconfig.php');
 	$currentpage = 'contact';
 
@@ -61,8 +61,8 @@
 	</div>
 	<div id="officelocation">
 		<?php
-			$sql = mysql_query("SELECT * FROM offices");
-			while ($row = mysql_fetch_assoc($sql)):
+			$sql = mysqli_query($conn,"SELECT * FROM offices");
+			while ($row = mysqli_fetch_assoc($sql)):
 				if ($row['officename'] == 'Mandalay') {
 					$default = 'default';
 					$office = "Head Office (Mandalay)";
@@ -78,11 +78,11 @@
 				<li><span style="color: yellow;"><i class="fa fa-location-arrow"></i> Address :</span> <em><?php echo $row['officeaddress'] ?></em></li>
 				<?php
 					$officeid = $row['officeid'];
-					$sqlofficephone = mysql_query("SELECT * FROM officephones WHERE officeid = '$officeid'");
+					$sqlofficephone = mysqli_query($conn,"SELECT * FROM officephones WHERE officeid = '$officeid'");
 				?>
 					<li><span style="color: yellow;"><i class="fa fa-phone"></i>&nbsp; Phone Numbers :</span>
 					<?php
-						while ($rowofficephone = mysql_fetch_assoc($sqlofficephone)):
+						while ($rowofficephone = mysqli_fetch_assoc($sqlofficephone)):
 						echo $rowofficephone['officephoneprefix']."-".$rowofficephone['officephoneno'] ?>
 					<?php
 						endwhile;
@@ -116,7 +116,7 @@
 		$email = $_POST['email'];
 		$suggestion = $_POST['suggestion'];
 
-		$insertsql = mysql_query("insert into mails(name, email, feedback, sendtime) values ('$name', '$email', '$suggestion', now())") or die(mysql_error());
+		$insertsql = mysqli_query($conn,"insert into mails(name, email, feedback, sendtime) values ('$name', '$email', '$suggestion', now())") or die(mysqli_error($conn));
 
 		echo "<script>swal({
 		title: 'Success!',

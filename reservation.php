@@ -3,7 +3,7 @@
 	//to use session
 	session_start();
 
-	//for mysql database connection
+	//for mysqli database connection
 	include('dbconfig/dbconfig.php');
 	
 	if (!isset($_SESSION['authentication'])) {
@@ -13,8 +13,8 @@
 
 	$customerid = $_SESSION['customerid'];
 
-	$getbookingsql = mysql_query("select * from bookings where customerid = '$customerid' ORDER BY bookingtime DESC") or die(mysql_error());
-	$checkgetbooking = mysql_num_rows($getbookingsql);
+	$getbookingsql = mysqli_query($conn,"select * from bookings where customerid = '$customerid' ORDER BY bookingtime DESC") or die(mysqli_error($conn));
+	$checkgetbooking = mysqli_num_rows($getbookingsql);
 	$currentpage = 'reservation';
 	
 
@@ -69,14 +69,14 @@
 								<td></td>
 							</tr>
 						</thead>
-						<?php while($rowbooking = mysql_fetch_assoc($getbookingsql)): $bookingid = $rowbooking['bookingid']; ?>
+						<?php while($rowbooking = mysqli_fetch_assoc($getbookingsql)): $bookingid = $rowbooking['bookingid']; ?>
 						<tr>
 							<td><?php echo $rowbooking['bookingid']; ?></td>
 							<td>
 								<?php
 								$officeid = $rowbooking['officeid'];
-								$getofficesql = mysql_query("select * from offices where officeid = '$officeid'") or die(mysql_error());
-								$rowoffice = mysql_fetch_assoc($getofficesql);
+								$getofficesql = mysqli_query($conn,"select * from offices where officeid = '$officeid'") or die(mysqli_error($conn));
+								$rowoffice = mysqli_fetch_assoc($getofficesql);
 								echo $rowoffice['officename'];
 								?>
 							</td>

@@ -3,7 +3,7 @@
 	//to use session
 	session_start();
 
-	//for mysql database connection
+	//for mysqli database connection
 	include('dbconfig/dbconfig.php');
 
 	
@@ -114,7 +114,7 @@
                     $next = $start + $driverlimit; 
                     $prev = $start - $driverlimit;
 
-                    $total = mysql_query("SELECT * FROM Drivers
+                    $total = mysqli_query($conn,"SELECT * FROM Drivers
 													WHERE officeid = '$officeid'
 													AND driverid != 'nodriver'
 													AND active = 1
@@ -123,9 +123,9 @@
 													WHERE confirmstatus = 'confirmed'
 													AND pickuptime BETWEEN '$pickuptime' AND '$returntime'
 													OR returntime BETWEEN '$pickuptime' AND '$returntime')");
-                    $total = mysql_num_rows($total);
+                    $total = mysqli_num_rows($total);
 
-					$getdriversquery = mysql_query("SELECT * FROM Drivers
+					$getdriversquery = mysqli_query($conn,"SELECT * FROM Drivers
 													WHERE officeid = '$officeid'
 													AND driverid != 'nodriver'
 													AND active = 1
@@ -138,7 +138,7 @@
 						echo "<div class='row driver'> <p>Sorry, there is no driver available for your booking date!</div>";
 					}
 					else{
-					while ($rowgetdrivers = mysql_fetch_assoc($getdriversquery)):
+					while ($rowgetdrivers = mysqli_fetch_assoc($getdriversquery)):
 					?>
 
 					<div class="row driver">
@@ -181,8 +181,8 @@
 						<div class="col-md-4">
 							<div class="ratingdriver">
 							<?php
-								$countrating = mysql_query("SELECT * FROM driverratings dr, customers c WHERE dr.customerid = c.customerid AND driverid = '$driverid'") or die(mysql_error());
-								$rowcountrating = mysql_num_rows($countrating);
+								$countrating = mysqli_query($conn,"SELECT * FROM driverratings dr, customers c WHERE dr.customerid = c.customerid AND driverid = '$driverid'") or die(mysqli_error($conn));
+								$rowcountrating = mysqli_num_rows($countrating);
 
 							?>
 							<h4>Ratings</h4>
@@ -204,8 +204,8 @@
 							<hr>
 							<h4><i class="fa fa-comments"></i> Comments</h4>
 							<?php
-								$getcommentssql = mysql_query("SELECT * FROM driverratings dr, customers c WHERE dr.CustomerID = c.CustomerID AND driverid = '$driverid' order by dr.ratingtime DESC limit 2 ") or die(mysql_error());
-								$rownogetcomments = mysql_num_rows($getcommentssql);
+								$getcommentssql = mysqli_query($conn,"SELECT * FROM driverratings dr, customers c WHERE dr.CustomerID = c.CustomerID AND driverid = '$driverid' order by dr.ratingtime DESC limit 2 ") or die(mysqli_error($conn));
+								$rownogetcomments = mysqli_num_rows($getcommentssql);
 								if ($rownogetcomments < 1) {
 							?>
 							<p>There is no comment to show yet!</p>
@@ -214,7 +214,7 @@
 							?>
 							<ul class="list-unstyled comments">
 							<?php
-								while ($rowgetcomments = mysql_fetch_assoc($getcommentssql)):
+								while ($rowgetcomments = mysqli_fetch_assoc($getcommentssql)):
 							?>
 								<li>
 									<span style="color: black"><strong><i class="fa fa-user"></i> <?php echo $rowgetcomments['customerusername']; ?></strong></span> : <em><?php echo $rowgetcomments['driverreview']; ?></em> 

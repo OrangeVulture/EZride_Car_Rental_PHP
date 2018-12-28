@@ -3,7 +3,7 @@
 	//to use session
 	session_start();
 
-	//for mysql database connection
+	//for mysqli database connection
 	include('dbconfig/dbconfig.php');
 	
 	if (!isset($_SESSION['authentication'])) {
@@ -13,9 +13,9 @@
 
 	$customerid = $_SESSION['customerid'];
 
-	$getcustomer = mysql_query("select * from customers where customerid = '$customerid'") or die(mysql_error());
+	$getcustomer = mysqli_query($conn,"select * from customers where customerid = '$customerid'") or die(mysqli_error($conn));
 
-	$rowgetcustomerdata = mysql_fetch_assoc($getcustomer);
+	$rowgetcustomerdata = mysqli_fetch_assoc($getcustomer);
 	$currentpage = 'index';
 
 	
@@ -30,7 +30,7 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 
-		<title>Xero | Profile</title>
+		<title>EZride | Profile</title>
 
 		<!-- Bootstrap -->
 		<link href="style/bootstrap.min.css" rel="stylesheet">
@@ -109,20 +109,6 @@
 										<input type="hidden" class="form-control" name="customerdob" id="customerdob" value="<?php echo $rowgetcustomerdata['customerdob']; ?>" required="">
 									</div>
 								</li>
-							<!-- <?php /*
-								$getpaymentsql = mysql_query("select * from paypalserver where customerid = '$customerid'") or die(mysql_error());
-								$rownogetpayment = mysql_num_rows($getpaymentsql);
-								if ($rownogetpayment > 0) {
-									$rowgetpaypal = mysql_fetch_assoc($getpaymentsql);
-							?>
-								<li>
-									<div id="divpaypal"><i class="fa fa-envelope"></i> Paypal Email : <?php echo $rowgetpaypal['paypalemail']; ?></div></li>
-								<li>
-									<div id="divpaypal"><i class="fa fa-credit-card"></i> Paypal Balance : <?php echo $rowgetpaypal['balance']; ?></div></li>
-							
-							<?php } else { ?>
-									<a href="addpaypalemail.php" id="paypalbutton" id="paypalbutton" class="btn btn-default">Add Paypal Email</a>
-							<?php } */?> -->
 								<div class="form-group">
 									<input type="hidden" class="btn btn-primary center-block" name="submit" id="button" value="Update">
 								</div>
@@ -233,7 +219,7 @@
 			}
 			else{
 			    move_uploaded_file($tmp, "images/customerphoto/$customerphoto");
-			    $updatesql = mysql_query("update customers set customername = '$customername',  customeremail = '$customeremail', customergender = '$customergender', customerphoto = '$customerphoto' where customerid = '$customerid'") or die(mysql_error());
+			    $updatesql = mysqli_query($conn,"update customers set customername = '$customername',  customeremail = '$customeremail', customergender = '$customergender', customerphoto = '$customerphoto' where customerid = '$customerid'") or die(mysqli_error($conn));
 			    echo "<script>swal({
 			    title: 'Success!',
 			    text: 'Your Profile has been updated!',
@@ -246,7 +232,7 @@
 			}
 		}
 		else{
-		    $updatesql = mysql_query("update customers set customername = '$customername',  customeremail = '$customeremail', customergender = '$customergender' where customerid = '$customerid'") or die(mysql_error());
+		    $updatesql = mysqli_query($conn,"update customers set customername = '$customername',  customeremail = '$customeremail', customergender = '$customergender' where customerid = '$customerid'") or die(mysqli_error($conn));
 		    echo "<script>swal({
 		    title: 'Success!',
 		    text: 'Your Profile has been updated!',

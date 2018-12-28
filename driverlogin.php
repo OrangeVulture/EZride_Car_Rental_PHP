@@ -73,10 +73,10 @@
 				$rawdriverpassword = $_POST['driverpassword'];
 				$driverpassword = md5($rawdriverpassword);
 
-				$sql = mysql_query("SELECT * from drivers where driverusername = '$driverusername' AND driverpassword = '$driverpassword' AND active = 1");
-				$rownum = mysql_num_rows($sql);
+				$sql = mysqli_query($conn,"SELECT * from drivers where driverusername = '$driverusername' AND driverpassword = '$driverpassword' AND active = 1");
+				$rownum = mysqli_num_rows($sql);
 				if ($rownum > 0) {
-					$rowstaff = mysql_fetch_assoc($sql);
+					$rowstaff = mysqli_fetch_assoc($sql);
 					$_SESSION['driverid'] = $rowstaff['driverid'];
 					$_SESSION['driverusername'] = $rowstaff['driverusername'];
 					$_SESSION['driverauth'] = true;		  		
@@ -91,8 +91,8 @@
 					});</script>";
 				}
 				else{
-					$checkban = mysql_query("SELECT * FROM Drivers where driverusername = '$driverusername' AND driverpassword = '$driverpassword' and active = 0") or die(mysql_error());
-					$checkbanquerynumrow = mysql_num_rows($checkban);
+					$checkban = mysqli_query($conn,"SELECT * FROM Drivers where driverusername = '$driverusername' AND driverpassword = '$driverpassword' and active = 0") or die(mysqli_error($conn));
+					$checkbanquerynumrow = mysqli_num_rows($checkban);
 					if ($checkbanquerynumrow > 0) {
 						echo "<script>swal({
 						title: 'Oops!',

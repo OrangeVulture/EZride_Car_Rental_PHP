@@ -3,7 +3,7 @@
 	//to use session
 	session_start();
 
-	//for mysql database connection
+	//for mysqli database connection
 	include('dbconfig/dbconfig.php');
 	
 	if (!isset($_SESSION['authentication'])) {
@@ -17,17 +17,17 @@
 
 	$bookingid = $_GET['bookingid'];
 
-	$getbookingsql = mysql_query("select * from bookings where bookingid = '$bookingid'") or die(mysql_error());
-	$rowbooking = mysql_fetch_assoc($getbookingsql);
+	$getbookingsql = mysqli_query($conn,"select * from bookings where bookingid = '$bookingid'") or die(mysqli_error($conn));
+	$rowbooking = mysqli_fetch_assoc($getbookingsql);
 
 	$carid = $rowbooking['carid'];
 	$durationinhours = $rowbooking['durationinhours'];
 	$driver = $rowbooking['driverid'];
 
-	$getcarsql = mysql_query("SELECT c.*, oc.carid FROM Cars c, OfficeCars oc
+	$getcarsql = mysqli_query($conn,"SELECT c.*, oc.carid FROM Cars c, OfficeCars oc
 												WHERE c.carno = oc.carno
-												AND oc.carid = '$carid'") or die(mysql_error());
-	$rowgetcar = mysql_fetch_assoc($getcarsql);
+												AND oc.carid = '$carid'") or die(mysqli_error($conn));
+	$rowgetcar = mysqli_fetch_assoc($getcarsql);
 
 	$carcost = $rowgetcar['carcost']/6 * $durationinhours;
 	$rowbooking['carcost'] = $carcost;
@@ -38,8 +38,8 @@
 	}
 	else{
 		$driverid = $rowbooking['driverid'];
-		$getdriversql = mysql_query("SELECT * FROM Drivers where driverid = '$driverid'") or die(mysql_error());
-		$rowgetdriver = mysql_fetch_assoc($getdriversql);
+		$getdriversql = mysqli_query($conn,"SELECT * FROM Drivers where driverid = '$driverid'") or die(mysqli_error($conn));
+		$rowgetdriver = mysqli_fetch_assoc($getdriversql);
 		$drivercost = $rowgetdriver['drivercost']/24 * $durationinhours;
 		$rowbooking['drivercost'] = $drivercost;
 	}
@@ -47,8 +47,8 @@
 
 
 	$customerusername = $_SESSION['customerusername'];
-	$getcustomer = mysql_query("SELECT * FROM Customers where customerusername = '$customerusername'");
-	$rowgetcustomer = mysql_fetch_assoc($getcustomer);
+	$getcustomer = mysqli_query($conn,"SELECT * FROM Customers where customerusername = '$customerusername'");
+	$rowgetcustomer = mysqli_fetch_assoc($getcustomer);
 
 	$customerid = $rowgetcustomer['customerid'];
 	$rowbooking['customerid'] = $customerid;

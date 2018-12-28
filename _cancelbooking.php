@@ -34,7 +34,7 @@
 	//to use session
 	session_start();
 
-	//for mysql database connection
+	//for mysqli database connection
 	include('dbconfig/dbconfig.php');
 	
 	if (!isset($_SESSION['authentication'])) {
@@ -49,18 +49,14 @@
 	$customerid = $_SESSION['customerid'];
 	$bookingid = $_GET['bookingid'];
 
-	$getbookingsql = mysql_query("select * from bookings where bookingid = '$bookingid' and customerid = '$customerid'") or die(mysql_error());
-	$rowbooking = mysql_fetch_assoc($getbookingsql); 
+	$getbookingsql = mysqli_query("select * from bookings where bookingid = '$bookingid' and customerid = '$customerid'") or die(mysqli_error($conn));
+	$rowbooking = mysqli_fetch_assoc($getbookingsql); 
 	$date1=strtotime("$rowbooking[pickuptime]");
 	$date2 = date("Y-m-d H:i:s");
 	$date2=strtotime("$date2");
 	$days = abs(($date1 - $date2)/60/60/24);
 	if ($days > 5):
-		$deletebookingsql = mysql_query("delete from bookings where bookingid = '$bookingid'") or die(mysql_error());
-		if ($rowbooking['paymentmethod'] == 'paypal') {
-			$totalcost = $rowbooking['totalcost'];
-			$updatepaypalbalancesql = mysql_query("update paypalserver set balance = balance + $totalcost where customerid = '$customerid'") or die(mysql_error());
-		}
+		$deletebookingsql = mysqli_query("delete from bookings where bookingid = '$bookingid'") or die(mysqli_error($conn))
   		echo "<script>swal({
 		  title: 'Success!',
 		  text: 'Your booking has been successfully cancelled!',

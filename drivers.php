@@ -1,7 +1,7 @@
 <?php
 	//to use session
 	session_start();
-	//for mysql database connection
+	//for mysqli database connection
 	include('dbconfig/dbconfig.php');
 	
 	if (!isset($_SESSION['authentication'])) {
@@ -65,11 +65,11 @@
                     $next = $start + $limit; 
                     $prev = $start - $limit;
 
-                    $total = mysql_query("SELECT * FROM drivers where driverid != 'nodriver' and Active = 1");
-                    $total = mysql_num_rows($total);
+                    $total = mysqli_query($conn,"SELECT * FROM drivers where driverid != 'nodriver' and Active = 1");
+                    $total = mysqli_num_rows($total);
 
-					$getdriversquery = mysql_query("SELECT * FROM drivers where driverid != 'nodriver'  and active = 1 ORDER BY driverexperience DESC LIMIT $start, $limit");
-					while ($rowgetdrivers = mysql_fetch_assoc($getdriversquery)):
+					$getdriversquery = mysqli_query($conn,"SELECT * FROM drivers where driverid != 'nodriver'  and active = 1 ORDER BY driverexperience DESC LIMIT $start, $limit");
+					while ($rowgetdrivers = mysqli_fetch_assoc($getdriversquery)):
 						$driverid = $rowgetdrivers['driverid'];
 					?>
 
@@ -106,8 +106,8 @@
 
 								<li>
 								<?php
-									$getofficesql = mysql_query("select * from offices where officeid = '$getofficeid'") or die(mysql_error());
-									$rowgetoffice = mysql_fetch_assoc($getofficesql);
+									$getofficesql = mysqli_query($conn,"select * from offices where officeid = '$getofficeid'") or die(mysqli_error($conn));
+									$rowgetoffice = mysqli_fetch_assoc($getofficesql);
 								?>
 								<i class="fa fa-home user-profile-icon"></i> From <?php echo $rowgetoffice['officename']; ?> Office
 								</li>
@@ -116,8 +116,8 @@
 
 						<div class="col-md-3">
 							<?php
-								$countrating = mysql_query("SELECT * FROM driverratings dr, customers c WHERE dr.customerid = c.customerid AND driverid = '$driverid'") or die(mysql_error());
-								$rowcountrating = mysql_num_rows($countrating);
+								$countrating = mysqli_query($conn,"SELECT * FROM driverratings dr, customers c WHERE dr.customerid = c.customerid AND driverid = '$driverid'") or die(mysqli_error($conn));
+								$rowcountrating = mysqli_num_rows($countrating);
 
 							?>
 							<h4>Ratings</h4>
@@ -138,8 +138,8 @@
 							<hr>
 							<h4><i class="fa fa-comments"></i> Comments</h4>
 							<?php
-								$getcommentssql = mysql_query("SELECT * FROM driverratings dr, customers c WHERE dr.CustomerID = c.CustomerID AND driverid = '$driverid' order by dr.ratingtime DESC limit 2 ") or die(mysql_error());
-								$rownogetcomments = mysql_num_rows($getcommentssql);
+								$getcommentssql = mysqli_query($conn,"SELECT * FROM driverratings dr, customers c WHERE dr.CustomerID = c.CustomerID AND driverid = '$driverid' order by dr.ratingtime DESC limit 2 ") or die(mysqli_error($conn));
+								$rownogetcomments = mysqli_num_rows($getcommentssql);
 								if ($rownogetcomments < 1) {
 							?>
 							<p>There is no comment to show yet!</p>
@@ -148,7 +148,7 @@
 							?>
 							<ul class="list-unstyled comments">
 							<?php
-								while ($rowgetcomments = mysql_fetch_assoc($getcommentssql)):
+								while ($rowgetcomments = mysqli_fetch_assoc($getcommentssql)):
 							?>
 								<li>
 									<span style="color: black"><strong><i class="fa fa-user"></i> <?php echo $rowgetcomments['customerusername']; ?></strong></span> : <em><?php echo $rowgetcomments['driverreview']; ?></em> 
@@ -161,10 +161,10 @@
 						<div class="col-md-3">
 							<?php
 							$driverid = $rowgetdrivers['driverid'];
-							$checkuserratingsql = mysql_query("select * from driverratings where customerid = '$customerid' and driverid = '$driverid'") or die(mysql_error());
-							$rowcheckuserrating = mysql_num_rows($checkuserratingsql);
+							$checkuserratingsql = mysqli_query($conn,"select * from driverratings where customerid = '$customerid' and driverid = '$driverid'") or die(mysqli_error($conn));
+							$rowcheckuserrating = mysqli_num_rows($checkuserratingsql);
 							if($rowcheckuserrating > 0):
-							$rowuserrating = mysql_fetch_assoc($checkuserratingsql);
+							$rowuserrating = mysqli_fetch_assoc($checkuserratingsql);
 							$userrating = $rowuserrating['driverrating'];
 							$one = ''; $two = ''; $three = ''; $four = ''; $five = '';
 							for ($i=1; $i < 6; $i++) { 
@@ -295,9 +295,9 @@
 		$customerid = $_SESSION['customerid'];
 		$driverid = $_POST['driverid'];
 
-		$insertratingsql = mysql_query("INSERT INTO driverratings(driverid, customerid, driverrating, driverreview, ratingtime) VALUES('$driverid', '$customerid', '$rating', '$comment', NOW())") or die(mysql_error());
+		$insertratingsql = mysqli_query($conn,"INSERT INTO driverratings(driverid, customerid, driverrating, driverreview, ratingtime) VALUES('$driverid', '$customerid', '$rating', '$comment', NOW())") or die(mysqli_error($conn));
 
-		$updateratingavg = mysql_query("UPDATE drivers SET driverrating = (SELECT AVG(driverrating) FROM driverratings WHERE driverratings.driverid = '$driverid') WHERE drivers.driverid = '$driverid'") or die(mysql_error());
+		$updateratingavg = mysqli_query($conn,"UPDATE drivers SET driverrating = (SELECT AVG(driverrating) FROM driverratings WHERE driverratings.driverid = '$driverid') WHERE drivers.driverid = '$driverid'") or die(mysqli_error($conn));
   		echo "<script>swal({
 		  title: 'Success!',
 		  text: 'Your Comment has been saved!',
