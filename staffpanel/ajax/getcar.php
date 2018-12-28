@@ -4,8 +4,8 @@
 	include('../../dbconfig/dbconfig.php');
 
 	$sql="SELECT Cars.*, COUNT(Cars.carno) AS ordercount FROM Bookings, Cars, OfficeCars WHERE Bookings.carid = OfficeCars.carid AND Cars.carno = OfficeCars.carno AND YEAR(Bookings.pickuptime) = '".$q."' GROUP BY Cars.carno ORDER BY ordercount DESC";
-	$getallcarsql = mysql_query($sql);
-	$rownocar = mysql_num_rows($getallcarsql);
+	$getallcarsql = mysqli_query($conn,$sql);
+	$rownocar = mysqli_num_rows($getallcarsql);
 
 	if($rownocar > 0):
 
@@ -26,7 +26,7 @@
 		</tr>
 	</thead>
 	<tbody>";
-			while ($rowgetallcars = mysql_fetch_assoc($getallcarsql)) {
+			while ($rowgetallcars = mysqli_fetch_assoc($getallcarsql)) {
 	echo"
 		<tr>
 			<td><img src='../images/carphoto/".$rowgetallcars['carphoto']."' alt='' width='30px' height='30px'></td>";

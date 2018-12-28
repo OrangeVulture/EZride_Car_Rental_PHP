@@ -12,6 +12,6 @@
 	include('../dbconfig/dbconfig.php');
 	$completebookingid = $_GET['bookingid'];
 
-	mysql_query("UPDATE Bookings SET confirmstatus = 'completed' where bookingid = '$completebookingid'");
+	mysqli_query($conn,"UPDATE Bookings SET confirmstatus = 'completed' where bookingid = '$completebookingid'");
 	echo "<script>window.location='ddashboard.php'</script>";
 ?>

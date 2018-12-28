@@ -4,8 +4,8 @@
 	include('../../dbconfig/dbconfig.php');
 
 	$sql="SELECT * FROM Customers WHERE DATE(signuptime) = '$q'";
-	$getcustomersql = mysql_query($sql);
-	$rownocustomer = mysql_num_rows($getcustomersql);
+	$getcustomersql = mysqli_query($conn,$sql);
+	$rownocustomer = mysqli_num_rows($getcustomersql);
 
 	if($rownocustomer > 0):
 
@@ -21,7 +21,7 @@
 		</tr>
 	</thead>
 	<tbody>";
-			while ($rowgetcustomer = mysql_fetch_assoc($getcustomersql)) {
+			while ($rowgetcustomer = mysqli_fetch_assoc($getcustomersql)) {
 	echo"
 		<tr>
 			<td><img src='../images/customerphoto/".$rowgetcustomer['customerphoto']."' alt='' width='30px' height='30px'></td>";

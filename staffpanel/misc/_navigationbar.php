@@ -41,14 +41,14 @@
             	}
             	else{
 
-            		$getbookingnoti = mysql_query("SELECT * FROM Bookings WHERE confirmstatus = 'pending' AND officeid = '$officeid' AND bookingtime > '$stafflastlogin'");
-            		$getbookingrowno = mysql_num_rows($getbookingnoti);
+            		$getbookingnoti = mysqli_query($conn,"SELECT * FROM Bookings WHERE confirmstatus = 'pending' AND officeid = '$officeid' AND bookingtime > '$stafflastlogin'");
+            		$getbookingrowno = mysqli_num_rows($getbookingnoti);
             		$noti = $noti + $getbookingrowno;
             		if ($getbookingrowno > 0) {
-            			while ($rowbooking = mysql_fetch_assoc($getbookingnoti)):
+            			while ($rowbooking = mysqli_fetch_assoc($getbookingnoti)):
             				$customerid = $rowbooking['customerid'];
-            				$getcustomer = mysql_query("Select * from Customers where customerid = '$customerid'");
-            				$rowgetcustomer = mysql_fetch_assoc($getcustomer);
+            				$getcustomer = mysqli_query($conn,"Select * from Customers where customerid = '$customerid'");
+            				$rowgetcustomer = mysqli_fetch_assoc($getcustomer);
             		?>
 
 					<li>

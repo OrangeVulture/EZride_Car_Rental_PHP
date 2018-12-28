@@ -14,28 +14,28 @@
 	$driverid = $_SESSION['driverid'];
 	$driverusername = $_SESSION['driverusername'];
 
-	$getdriversql = mysql_query("Select * from drivers where driverid = '$driverid'");
-	$rowgetdriver = mysql_fetch_assoc($getdriversql);
+	$getdriversql = mysqli_query($conn,"Select * from drivers where driverid = '$driverid'");
+	$rowgetdriver = mysqli_fetch_assoc($getdriversql);
 	$drivername = $rowgetdriver['drivername'];
 	$driverphoto = $rowgetdriver['driverphoto'];
 	$officeid = $rowgetdriver['officeid'];
 
-	$getofficename = mysql_query("Select officename from Offices where officeid = '$officeid'");
-	$rowgetoffice = mysql_fetch_assoc($getofficename);
+	$getofficename = mysqli_query($conn,"Select officename from Offices where officeid = '$officeid'");
+	$rowgetoffice = mysqli_fetch_assoc($getofficename);
 	$officename = $rowgetoffice['officename'];
 
 	$bookingid = $_GET['bookingid'];
-	$getbooking = mysql_query("SELECT * from Bookings where bookingid = '$bookingid'");
-	$rowgetbooking = mysql_fetch_assoc($getbooking);
+	$getbooking = mysqli_query($conn,"SELECT * from Bookings where bookingid = '$bookingid'");
+	$rowgetbooking = mysqli_fetch_assoc($getbooking);
 	$totalcost = $rowgetbooking['totalcost'];
 
 	$customerid = $rowgetbooking['customerid'];
-	$getcustomer = mysql_query("SELECT * FROM Customers where customerid = '$customerid'");
-	$rowgetcustomer = mysql_fetch_assoc($getcustomer);
+	$getcustomer = mysqli_query($conn,"SELECT * FROM Customers where customerid = '$customerid'");
+	$rowgetcustomer = mysqli_fetch_assoc($getcustomer);
 
 	$carid = $rowgetbooking['carid'];
-	$getcar = mysql_query("SELECT * FROM Cars, OfficeCars where Cars.carno = OfficeCars.carno AND OfficeCars.carid = '$carid'");
-	$rowgetcar = mysql_fetch_assoc($getcar);
+	$getcar = mysqli_query($conn,"SELECT * FROM Cars, OfficeCars where Cars.carno = OfficeCars.carno AND OfficeCars.carid = '$carid'");
+	$rowgetcar = mysqli_fetch_assoc($getcar);
 
 	$driverid = $rowgetbooking['driverid'];
 	
@@ -233,8 +233,8 @@
 
 							if ($driverid == 'nodriver'):
 							else:
-								$getdriver = mysql_query("select * from Drivers where driverid = '$driverid'");
-								$rowgetdriver = mysql_fetch_assoc($getdriver);
+								$getdriver = mysqli_query($conn,"select * from Drivers where driverid = '$driverid'");
+								$rowgetdriver = mysqli_fetch_assoc($getdriver);
 
 						?>
 						<div class="col-md-3 col-sm-3 col-xs-12 profile_left">

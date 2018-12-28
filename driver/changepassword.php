@@ -8,8 +8,8 @@
 	$driverid = $_SESSION['driverid'];
 	$driverusername = $_SESSION['driverusername'];
 
-	$getdriversql = mysql_query("Select * from drivers where driverid = '$driverid'");
-	$rowgetdriver = mysql_fetch_assoc($getdriversql);
+	$getdriversql = mysqli_query($conn,"Select * from drivers where driverid = '$driverid'");
+	$rowgetdriver = mysqli_fetch_assoc($getdriversql);
 	$drivername = $rowgetdriver['drivername'];
 	$officeid = $rowgetdriver['officeid'];
 	$driverphoto = $rowgetdriver['driverphoto'];
@@ -204,8 +204,8 @@
 	            $oldpassword = md5($oldpassword);
 	            $newpassword = md5($newpassword);
 
-	            $checkpasswordsql = mysql_query("SELECT * FROM drivers where driverid = '$driverid' AND driverpassword = '$oldpassword'") or die(mysql_error());
-	            $rowcheckpassword = mysql_num_rows($checkpasswordsql);
+	            $checkpasswordsql = mysqli_query($conn,"SELECT * FROM drivers where driverid = '$driverid' AND driverpassword = '$oldpassword'") or die(mysqli_error($conn));
+	            $rowcheckpassword = mysqli_num_rows($checkpasswordsql);
 
 	            if ($rowcheckpassword < 1) {
 		            echo "<script>swal({
@@ -219,7 +219,7 @@
 		            });</script>";
 	            }
 	            else{
-	                $changepasswordsql = mysql_query("UPDATE drivers set driverpassword = '$newpassword' where driverid = '$driverid'") or die(mysql_error());
+	                $changepasswordsql = mysqli_query($conn,"UPDATE drivers set driverpassword = '$newpassword' where driverid = '$driverid'") or die(mysqli_error($conn));
 			            echo "<script>swal({
 			            title: 'Success!',
 			            text: 'Your password has been changed!',

@@ -7,8 +7,8 @@
 	include('../../dbconfig/dbconfig.php');
 
 	$sql="SELECT Drivers.*, COUNT(Drivers.driverid) AS bookingcount FROM Drivers, Bookings WHERE Drivers.driverid = Bookings.driverid AND YEAR(Bookings.pickuptime) = '$year' AND MONTH(Bookings.pickuptime) = '$month' AND Drivers.driverid != 'nodriver' GROUP BY Drivers.driverid ORDER BY bookingcount DESC";
-	$getdriversql = mysql_query($sql);
-	$rownodriver = mysql_num_rows($getdriversql);
+	$getdriversql = mysqli_query($conn,$sql);
+	$rownodriver = mysqli_num_rows($getdriversql);
 
 	if($rownodriver > 0):
 
@@ -27,7 +27,7 @@
 		</tr>
 	</thead>
 	<tbody>";
-			while ($rowgetdriver = mysql_fetch_assoc($getdriversql)) {
+			while ($rowgetdriver = mysqli_fetch_assoc($getdriversql)) {
 	echo"
 		<tr>
 			<td><img src='../images/driverphoto/".$rowgetdriver['driverphoto']."' alt='' width='30px' height='30px'></td>";

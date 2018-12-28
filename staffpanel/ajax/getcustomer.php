@@ -7,8 +7,8 @@
 	include('../../dbconfig/dbconfig.php');
 
 	$sql="SELECT Customers.*, COUNT(Customers.customerid) AS bookingcount FROM Customers, Bookings WHERE Customers.customerid = Bookings.customerid AND YEAR(Bookings.pickuptime) = '$year' AND MONTH(Bookings.pickuptime) = '$month' GROUP BY Customers.customerid ORDER BY bookingcount DESC";
-	$getcustomersql = mysql_query($sql);
-	$rownocustomer = mysql_num_rows($getcustomersql);
+	$getcustomersql = mysqli_query($conn,$sql);
+	$rownocustomer = mysqli_num_rows($getcustomersql);
 
 	if($rownocustomer > 0):
 
@@ -25,7 +25,7 @@
 		</tr>
 	</thead>
 	<tbody>";
-			while ($rowgetcustomer = mysql_fetch_assoc($getcustomersql)) {
+			while ($rowgetcustomer = mysqli_fetch_assoc($getcustomersql)) {
 	echo"
 		<tr>
 			<td><img src='../images/customerphoto/".$rowgetcustomer['customerphoto']."' alt='' width='30px' height='30px'></td>";

@@ -8,8 +8,8 @@
 	$driverid = $_SESSION['driverid'];
 	$driverusername = $_SESSION['driverusername'];
 
-	$getdriversql = mysql_query("Select * from drivers where driverid = '$driverid'");
-	$rowgetdriver = mysql_fetch_assoc($getdriversql);
+	$getdriversql = mysqli_query($conn,"Select * from drivers where driverid = '$driverid'");
+	$rowgetdriver = mysqli_fetch_assoc($getdriversql);
 	$drivername = $rowgetdriver['drivername'];
 	$officeid = $rowgetdriver['officeid'];
 
@@ -95,7 +95,7 @@
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                 <?php
-                  $getallBookingsql = mysql_query("SELECT * FROM Bookings where driverid = '$driverid' and confirmstatus != 'declined' ORDER BY pickuptime");
+                  $getallBookingsql = mysqli_query($conn,"SELECT * FROM Bookings where driverid = '$driverid' and confirmstatus != 'declined' ORDER BY pickuptime");
                 ?>
                   <div class="x_content">
                               <table id="datatable-fixed-header" class="table table-striped table-bordered">
@@ -116,14 +116,14 @@
                       </thead>
                       <tbody>
                         <?php
-                          while ($rowgetallBookings = mysql_fetch_assoc($getallBookingsql)) {
+                          while ($rowgetallBookings = mysqli_fetch_assoc($getallBookingsql)) {
                         ?>
                         <tr>
                           <td>
                             <?php
                               $customerid = $rowgetallBookings['customerid']; 
-                              $getcusname = mysql_query("select customername from Customers where customerid = '$customerid'");
-                              $rowcusname = mysql_fetch_assoc($getcusname);
+                              $getcusname = mysqli_query($conn,"select customername from Customers where customerid = '$customerid'");
+                              $rowcusname = mysqli_fetch_assoc($getcusname);
                               echo $rowcusname['customername'];
                             ?>
                           </td>
@@ -134,16 +134,16 @@
                           <td>
                             <?php
                               $carid = $rowgetallBookings['carid']; 
-                              $getcarname = mysql_query("select carname from Cars, OfficeCars  where cars.carno = OfficeCars.carno AND OfficeCars.carid = '$carid'");
-                              $rowcarname = mysql_fetch_assoc($getcarname);
+                              $getcarname = mysqli_query($conn,"select carname from Cars, OfficeCars  where cars.carno = OfficeCars.carno AND OfficeCars.carid = '$carid'");
+                              $rowcarname = mysqli_fetch_assoc($getcarname);
                               echo $rowcarname['carname'];
                             ?>
                           </td>
                           <td>
                             <?php
                               $driverid = $rowgetallBookings['driverid']; 
-                              $getdrivername = mysql_query("select drivername from Drivers where driverid = '$driverid'");
-                              $rowdrivername = mysql_fetch_assoc($getdrivername);
+                              $getdrivername = mysqli_query($conn,"select drivername from Drivers where driverid = '$driverid'");
+                              $rowdrivername = mysqli_fetch_assoc($getdrivername);
                               echo $rowdrivername['drivername'];
                             ?>
                           </td>

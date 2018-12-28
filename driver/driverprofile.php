@@ -8,8 +8,8 @@
 	$driverid = $_SESSION['driverid'];
 	$driverusername = $_SESSION['driverusername'];
 
-	$getdriversql = mysql_query("Select * from drivers where driverid = '$driverid'");
-	$rowgetdriver = mysql_fetch_assoc($getdriversql);
+	$getdriversql = mysqli_query($conn,"Select * from drivers where driverid = '$driverid'");
+	$rowgetdriver = mysqli_fetch_assoc($getdriversql);
 	$drivername = $rowgetdriver['drivername'];
 	$officeid = $rowgetdriver['officeid'];
 	$driverphoto = $rowgetdriver['driverphoto'];
@@ -229,7 +229,7 @@
 					}
 					else{
 						move_uploaded_file($tmp, "../images/driverphoto/$driverphoto");
-						$updatedriverinfosql = mysql_query("update drivers set drivername = '$drivername', driveremail = '$driveremail', driverphoto = '$driverphoto', driverage = '$driverage', driverexperience = '$driverexperience' where driverid = '$driverid'") or die(mysql_error());
+						$updatedriverinfosql = mysqli_query($conn,"update drivers set drivername = '$drivername', driveremail = '$driveremail', driverphoto = '$driverphoto', driverage = '$driverage', driverexperience = '$driverexperience' where driverid = '$driverid'") or die(mysqli_error($conn));
 						echo "<script>swal({
 						title: 'Success!',
 						text: 'Your driver information has been updated!',
@@ -242,7 +242,7 @@
 				}
 			}
 			else {
-				$updatedriverinfosql = mysql_query("update drivers set drivername = '$drivername', driveremail = '$driveremail', driverage = '$driverage', driverexperience = '$driverexperience' where driverid = '$driverid'") or die(mysql_error());
+				$updatedriverinfosql = mysqli_query($conn,"update drivers set drivername = '$drivername', driveremail = '$driveremail', driverage = '$driverage', driverexperience = '$driverexperience' where driverid = '$driverid'") or die(mysqli_error($conn));
 				echo "<script>swal({
 				title: 'Success!',
 				text: 'Your driver information has been updated!',

@@ -40,15 +40,15 @@
             		# code...
             	}
             	else{
-
-            		$getbookingnoti = mysql_query("SELECT * FROM Bookings WHERE confirmstatus = 'confirmed' AND driverid = '$driverid'");
-            		$getbookingrowno = mysql_num_rows($getbookingnoti);
+            		include 'dbconfig/dbconfig.php';
+            		$getbookingnoti = mysqli_query($conn,"SELECT * FROM Bookings WHERE confirmstatus = 'confirmed' AND driverid = '$driverid'");
+            		$getbookingrowno = mysqli_num_rows($getbookingnoti);
             		$noti = $noti + $getbookingrowno;
             		if ($getbookingrowno > 0) {
-            			while ($rowbooking = mysql_fetch_assoc($getbookingnoti)):
+            			while ($rowbooking = mysqli_fetch_assoc($getbookingnoti)):
             				$customerid = $rowbooking['customerid'];
-            				$getcustomer = mysql_query("Select * from Customers where customerid = '$customerid'");
-            				$rowgetcustomer = mysql_fetch_assoc($getcustomer);
+            				$getcustomer = mysqli_query($conn,"Select * from Customers where customerid = '$customerid'");
+            				$rowgetcustomer = mysqli_fetch_assoc($getcustomer);
             		?>
 
 					<li>
