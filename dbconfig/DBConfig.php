@@ -1,10 +1,9 @@
 <?php
   $dbhost = "localhost";
   $dbuser = "root";
-  $dbpass = "joseph99";
+  $dbpass = "";
   $dbname = "ezride";
 
-  $conn = @mysql_connect($dbhost, $dbuser, $dbpass);
-  mysql_select_db($dbname, $conn);
+  $conn = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
 ?>
 
